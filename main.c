@@ -1,7 +1,7 @@
 #include "main.h"
 
 int main(int ac, char **argv){
-	char *prompt = "root $ ";
+	char *prompt = "andy $ ";
 	char *lineptr;
 	size_t a = 0;
 
