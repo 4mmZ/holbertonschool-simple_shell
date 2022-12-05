@@ -2,24 +2,21 @@
 char ** tokenize(char *str);
 char ** _path(void);
 char ** get_command(char ** tkns);
-void execute(char ** function);
+void execute(char ** function, char ** tokenbuff);
 
 int main(void)
 {
 	char * buffer = NULL;
 	size_t i = 0;
-	char ** tokenbuff = NULL;
 	char ** function;
-
-	while(1)
-	{
+	char ** tokenbuff;
+	while (1)
+	{	
 		printf("SNA$");
-
 		if(getline(&buffer, &i, stdin) == -1)
 			return(0);
 		tokenbuff = tokenize(buffer);
-		function = get_command(tokenbuff);
-		execute(function);
+		execute(function, tokenbuff);
 	}
 }
 
@@ -63,23 +60,58 @@ char ** get_command(char ** tkns)
 {
 	 char * ccopy;
 	 char ** path = _path();
-	 char * function;
+	 char * function = NULL;
 	 int i = 0;
+	 struct stat buf;
 
 	 while(path[i])
 	 {
 		ccopy = tkns[0];
 		function = malloc(strlen(path[i]) + strlen(ccopy) + 1);
-	       strcpy(function, path[i]);
-	       strcat(function, "/");
-	       strcat(function, ccopy);
-	       i++;
-	 }
-	 tkns[0] = function;
-	 return (tkns);
+		if(!function)
+		{
+			perror("nashe");
+			exit(EXIT_FAILURE);
+		}
+		strcpy(function, path[i]);
+		strcat(function, "/");
+		strcat(function, ccopy);
+		if (!stat(function, &buf))
+		{
+		       tkns[0] = function;
+		       return(tkns);
+		}
+		i++;
+	}
+	return (tkns);
 }
-void execute(char ** function)
+void execute(char ** function, char ** tokenbuff)
 {
-	execve(function[0], function, NULL);
-}
+	char * buff = NULL;
+	pid_t p, w;
+	char command = 0;
 
+	int wstatus;
+
+	p = fork();
+
+	if (p == -1)
+	{
+		perror("nashe");
+		exit(EXIT_FAILURE);
+	}
+	else if (p == 0)
+	{
+		function = get_command(tokenbuff);
+		command = execve(function[0], function, NULL);
+		exit(0);
+	}
+	else
+	{
+		w = waitpid(p, &wstatus, WUNTRACED | WCONTINUED);
+
+		if (w == -1)
+			exit(EXIT_FAILURE);
+
+	}
+}
