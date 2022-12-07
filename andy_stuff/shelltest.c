@@ -1,34 +1,41 @@
 #include "main.h"
-char ** tokenize(char *str);
-char ** _path(void);
-char ** get_command(char ** tkns);
-void execute(char ** function, char ** tokenbuff);
+char **tokenize(char *str);
+char **_path(void);
+char **get_command(char **tkns);
+void execute(char **tokenbuff);
+int fun_exit(char **function);
+extern char **environ;
 
 int main(void)
 {
-	char * buffer = NULL;
+	char *buffer = NULL;
 	size_t i = 0;
-	char ** function;
-	char ** tokenbuff;
+	char **tokenbuff;
+
 	while (1)
-	{	
-		printf("SNA$");
-		if(getline(&buffer, &i, stdin) == -1)
-			return(0);
+	{
+		printf("SNA$ ");
+		if (getline(&buffer, &i, stdin) == -1)
+			return (0);
 		tokenbuff = tokenize(buffer);
-		execute(function, tokenbuff);
+		execute(tokenbuff);
+
+		if (strcmp(buffer, "exit") == 0)
+		{
+			return (0);
+		}
 	}
 }
 
-char ** tokenize(char *str)
+char **tokenize(char *str)
 {
 	char *tkn;
-	char ** tkns;
+	char **tkns;
 	int i = 1024;
 	int j = 0;
 
 	tkns = malloc(sizeof(char *) * i);
-	tkn = strtok(str, " \n");
+	tkn = strtok(str, "	 \n");
 	while (tkn)
 	{
 		tkns[j] = tkn;
@@ -37,7 +44,7 @@ char ** tokenize(char *str)
 	}
 	return (tkns);
 }
-char ** _path(void)
+char **_path(void)
 {
 	char *path = getenv("PATH");
 	char *ptkn;
@@ -56,19 +63,19 @@ char ** _path(void)
 	}
 	return (ptkns);
 }
-char ** get_command(char ** tkns)
+char **get_command(char **tkns)
 {
-	 char * ccopy;
-	 char ** path = _path();
-	 char * function = NULL;
+	 char *ccopy;
+	 char **path = _path();
+	 char *function = NULL;
 	 int i = 0;
 	 struct stat buf;
 
-	 while(path[i])
-	 {
+	while (path[i])
+	{
 		ccopy = tkns[0];
 		function = malloc(strlen(path[i]) + strlen(ccopy) + 1);
-		if(!function)
+		if (!function)
 		{
 			perror("nashe");
 			exit(EXIT_FAILURE);
@@ -78,17 +85,18 @@ char ** get_command(char ** tkns)
 		strcat(function, ccopy);
 		if (!stat(function, &buf))
 		{
-		       tkns[0] = function;
-		       return(tkns);
+			tkns[0] = function;
+			return (tkns);
 		}
 		i++;
 	}
 	return (tkns);
 }
-void execute(char ** function, char ** tokenbuff)
+void execute(char **tokenbuff)
 {
-	char * buff = NULL;
+	char *buff = NULL;
 	pid_t p, w;
+	char **function;
 	char command = 0;
 
 	int wstatus;
@@ -103,7 +111,7 @@ void execute(char ** function, char ** tokenbuff)
 	else if (p == 0)
 	{
 		function = get_command(tokenbuff);
-		command = execve(function[0], function, NULL);
+		command = execve(function[0], function, environ);
 		exit(0);
 	}
 	else
@@ -114,4 +122,12 @@ void execute(char ** function, char ** tokenbuff)
 			exit(EXIT_FAILURE);
 
 	}
+}
+/**
+ *fun_exit - function exit shell
+ *return: always 0
+ */
+int fun_exit(char **function)
+{
+	return (0);
 }
