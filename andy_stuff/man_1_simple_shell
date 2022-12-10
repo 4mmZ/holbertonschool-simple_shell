@@ -1,0 +1,27 @@
+# NAME
+	simple shell
+
+# SYNOPSIS
+	./a.out
+
+# DESCRIPTION
+	Project for Holbebrton Uruguay C#19.
+	Imitation of a real shell, must interpret input commands.
+
+# INITIALIZATION
+	This  shell compiles with this snippet
+		gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
+
+# OPTIONS
+	- env: Prints Enviroment variables.
+	- ls: Print the content of a directory.
+	- pwd: Print current working directory.
+	- exit: Exit the shell program.
+
+# BUGS
+	No known bugs.
+	
+	
+# AUTHORS
+	- Andrés Maciel.
+	- Neo Dau.
