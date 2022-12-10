@@ -14,7 +14,7 @@ int main(void)
 
 	while (1)
 	{
-		printf("SNA$ ");
+		write(STDOUT_FILENO, &"SNA$ ", 5);
 		if (getline(&buffer, &i, stdin) == -1)
 			return (0);
 		tokenbuff = tokenize(buffer);
