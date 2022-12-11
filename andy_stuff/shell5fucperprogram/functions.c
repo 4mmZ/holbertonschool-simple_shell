@@ -1,16 +1,16 @@
 #include "main.h"
 
-char * get_env(char * variable)
+char *get_env(char *variable)
 {
-        char ** env = environ;
+	char **env = environ;
 	int x = 0, y, con = 0, len;
-        char *path = NULL;
+	char *path = NULL;
 
 	path = variable;
 	if (variable == NULL || !variable[x])
-		return(NULL);
+		return (NULL);
 	len = str_len(path);
-	while(*(environ + x))
+	while (*(environ + x))
 	{
 		y = 0;
 		while (*(*(env + x) + y) != '=')
@@ -22,30 +22,37 @@ char * get_env(char * variable)
 		if (con == len)
 		{
 			y++;
-			return(*(environ + x) + y);
+			return (*(environ + x) + y);
 		}
 		x++;
 		con = 0;
 	}
-
-        return (NULL);
+	free(path);
+	return (NULL);
 }
-
 char **tokenize(char *str)
 {
 	char *tkn;
 	char **tkns;
-	int i = 1024;
+	int num = 0;
 	int j = 0;
 
-	tkns = malloc(sizeof(char *) * i);
+	num = num_count(str);
+
+	tkns = calloc(num + 1, sizeof(char *));
+	if (!tkns)
+	{
+		free(tkns);
+		return(NULL);
+	}
 	tkn = strtok(str, "	 \n");
 	while (tkn)
 	{
 		tkns[j] = tkn;
-		tkn = strtok(NULL, " \n");
+		tkn = strtok(NULL, "	 \n");
 		j++;
 	}
+	
 	return (tkns);
 
 }
@@ -54,11 +61,14 @@ char **_path(void)
 	char *path = get_env("PATH");
 	char *ptkn;
 	char **ptkns;
-	int i = 1024;
+	int pnum = 0;
 	int j = 0;
 
-	ptkns = malloc(sizeof(char *) * i);
+	pnum = num_count(path);
+	ptkns = calloc(pnum + 1, sizeof(char *));
 	ptkn = strtok(path, ":");
+	if (!ptkns)
+		return(0);
 
 	while (ptkn)
 	{
@@ -66,6 +76,7 @@ char **_path(void)
 		ptkn = strtok(NULL, ":");
 		j++;
 	}
+	free(ptkn);
 	return (ptkns);
 }
 char **get_command(char **tkns)
@@ -79,10 +90,10 @@ char **get_command(char **tkns)
 	while (path[i])
 	{
 		ccopy = tkns[0];
-		function = malloc(str_len(path[i]) + str_len(ccopy) + 1);
+		function = _calloc(str_len(path[i]) + str_len(ccopy) + 2, sizeof(char));
 		if (!function)
 		{
-			perror("nashe");
+			perror("Error");
 			exit(EXIT_FAILURE);
 		}
 		strcpy(function, path[i]);
@@ -95,6 +106,7 @@ char **get_command(char **tkns)
 		}
 		i++;
 	}
+	free(function);
 	return (tkns);
 }
 void execute(char **tokenbuff)
@@ -114,7 +126,8 @@ void execute(char **tokenbuff)
 	else if (p == 0)
 	{
 		function = get_command(tokenbuff);
-		execve(function[0], function, environ);
+		if(execve(function[0], function, environ) == 1)
+			exit(0);
 		exit(0);
 	}
 	else

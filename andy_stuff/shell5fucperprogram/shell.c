@@ -2,27 +2,33 @@
 
 /*void prompt (int entero);*/
 
-
 int main(void)
 {
 	char *buffer = NULL;
 	size_t i = 0;
 	char **tokenbuff;
-	
 	/*signal(SIGINT, prompt);*/
 	while (1)
 	{
-		printf("SNA$ ");
+		if (isatty(0) == 1)
+			printf("SNA$ ");
 		if (getline(&buffer, &i, stdin) == -1)
+		{
+			free(buffer);
 			return (0);
+		
+		}
 		tokenbuff = tokenize(buffer);
 		execute(tokenbuff);
 
-		if (strcmp(buffer, "exit") == 0)
+		if (_strcmp(buffer, "exit") == 0)
 		{
 			return (0);
 		}
+		free(tokenbuff);
+		free(buffer);
 	}
+	free(buffer);
 	free(tokenbuff);
 }
 /*
