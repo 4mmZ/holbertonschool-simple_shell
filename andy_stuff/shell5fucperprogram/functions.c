@@ -3,16 +3,31 @@
 char * get_env(char * variable)
 {
         char ** env = environ;
+	int x = 0, y, con = 0, len;
         char *path = NULL;
-	int i;
 
-        for ( i = 0; env[i]; i++)
-        {
-                path = strtok(env[i], "=");
-                if (!strcmp(path, variable))
-                        return(strtok(NULL, "="));
-        }
-	free(path);
+	path = variable;
+	if (variable == NULL || !variable[x])
+		return(NULL);
+	len = str_len(path);
+	while(*(environ + x))
+	{
+		y = 0;
+		while (*(*(env + x) + y) != '=')
+		{
+			if (*(*(env + x) + y) == variable[y])
+				con++;
+			y++;
+		}
+		if (con == len)
+		{
+			y++;
+			return(*(environ + x) + y);
+		}
+		x++;
+		con = 0;
+	}
+
         return (NULL);
 }
 
@@ -32,7 +47,7 @@ char **tokenize(char *str)
 		j++;
 	}
 	return (tkns);
-	free(tkns);
+
 }
 char **_path(void)
 {
@@ -52,7 +67,6 @@ char **_path(void)
 		j++;
 	}
 	return (ptkns);
-	free(ptkns);
 }
 char **get_command(char **tkns)
 {
@@ -82,7 +96,6 @@ char **get_command(char **tkns)
 		i++;
 	}
 	return (tkns);
-	free(tkns);
 }
 void execute(char **tokenbuff)
 {
@@ -95,7 +108,7 @@ void execute(char **tokenbuff)
 
 	if (p == -1)
 	{
-		perror("nashe");
+		perror("Error");
 		exit(EXIT_FAILURE);
 	}
 	else if (p == 0)
