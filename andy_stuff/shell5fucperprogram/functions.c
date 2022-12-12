@@ -39,7 +39,7 @@ char **tokenize(char *str)
 
 	num = num_count(str);
 
-	tkns = calloc(num + 1, sizeof(char *));
+	tkns = _calloc(num + 1, sizeof(char *));
 	if (!tkns)
 	{
 		free(tkns);
@@ -51,9 +51,10 @@ char **tokenize(char *str)
 		tkns[j] = tkn;
 		tkn = strtok(NULL, "	 \n");
 		j++;
+		return(tkns);
 	}
-	
-	return (tkns);
+	free(tkns);
+	exit(EXIT_SUCCESS);
 
 }
 char **_path(void)
@@ -76,7 +77,6 @@ char **_path(void)
 		ptkn = strtok(NULL, ":");
 		j++;
 	}
-	free(ptkn);
 	return (ptkns);
 }
 char **get_command(char **tkns)

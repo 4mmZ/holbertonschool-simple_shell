@@ -20,13 +20,13 @@ int main(void)
 		}
 		tokenbuff = tokenize(buffer);
 		execute(tokenbuff);
+		free(tokenbuff);
 
 		if (_strcmp(buffer, "exit") == 0)
 		{
+			free(buffer);
 			return (0);
 		}
-		free(tokenbuff);
-		free(buffer);
 	}
 	free(buffer);
 	free(tokenbuff);
