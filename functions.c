@@ -42,7 +42,6 @@ char **tokenize(char *str)
 	tkns = _calloc(num + 1, sizeof(char *));
 	if (!tkns)
 	{
-		free(tkns);
 		return(NULL);
 	}
 	tkn = strtok(str, "	 \n");
@@ -51,11 +50,8 @@ char **tokenize(char *str)
 		tkns[j] = tkn;
 		tkn = strtok(NULL, "	 \n");
 		j++;
-		return(tkns);
 	}
-	free(str);
-	free_all(tkns);
-	exit(0);
+	return (tkns);
 
 }
 char **_path(void)

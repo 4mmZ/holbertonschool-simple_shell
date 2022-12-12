@@ -7,12 +7,14 @@ int main(void)
 	char *buffer = NULL;
 	size_t i = 0;
 	char **tokenbuff;
+	int line = 0;
 	/*signal(SIGINT, prompt);*/
 	while (1)
 	{
 		if (isatty(0) == 1)
 			printf("$ ");
-		if (getline(&buffer, &i, stdin) == -1)
+		line = getline(&buffer, &i, stdin);
+		if (line == -1)
 		{
 			free(buffer);
 			exit (0);
