@@ -66,7 +66,7 @@ char **_path(void)
 	int j = 0;
 
 	pnum = num_count(path);
-	ptkns = calloc(pnum + 1, sizeof(char *));
+	ptkns = _calloc(pnum + 1, sizeof(char *));
 	ptkn = strtok(path, ":");
 	if (!ptkns)
 		return(0);

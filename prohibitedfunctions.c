@@ -78,8 +78,10 @@ void *_calloc(unsigned int nmemb, unsigned int size)
 		{
 			a[i] = 0;
 		}
+		return(a);
 	}
-	return (a);
+	free(a);
+	exit(EXIT_SUCCESS);
 }
 char *_strcpy(char *dest, char *src)
 {
