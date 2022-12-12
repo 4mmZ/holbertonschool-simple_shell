@@ -11,6 +11,7 @@
 
 extern char ** environ;
 
+int free_all(char **buffer);
 int num_count (char *var);
 void *_calloc(unsigned int nmemb, unsigned int size);
 char *_strcpy(char *dest, char *src);
