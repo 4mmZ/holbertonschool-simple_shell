@@ -1,59 +1,75 @@
 #include "main.h"
-char **tokenize(char *str);
-char **_path(void);
-char **get_command(char **tkns);
-void execute(char **tokenbuff);
-int fun_exit(char **function);
-extern char **environ;
 
-int main(void)
+char *get_env(char *variable)
 {
-	char *buffer = NULL;
-	size_t i = 0;
-	char **tokenbuff;
+	char **env = environ;
+	int x = 0, y, con = 0, len;
+	char *path = NULL;
 
-	while (1)
+	path = variable;
+	if (variable == NULL || !variable[x])
+		return (NULL);
+	len = str_len(path);
+	while (*(environ + x))
 	{
-		printf("SNA$ ");
-		if (getline(&buffer, &i, stdin) == -1)
-			return (0);
-		tokenbuff = tokenize(buffer);
-		execute(tokenbuff);
-
-		if (strcmp(buffer, "exit") == 0)
+		y = 0;
+		while (*(*(env + x) + y) != '=')
 		{
-			return (0);
+			if (*(*(env + x) + y) == variable[y])
+				con++;
+			y++;
 		}
+		if (con == len)
+		{
+			y++;
+			return (*(environ + x) + y);
+		}
+		x++;
+		con = 0;
 	}
+	free(path);
+	return (NULL);
 }
-
 char **tokenize(char *str)
 {
 	char *tkn;
 	char **tkns;
-	int i = 1024;
+	int num = 0;
 	int j = 0;
 
-	tkns = malloc(sizeof(char *) * i);
+	num = num_count(str);
+
+	tkns = _calloc(num + 1, sizeof(char *));
+	if (!tkns)
+	{
+		free(tkns);
+		return(NULL);
+	}
 	tkn = strtok(str, "	 \n");
 	while (tkn)
 	{
 		tkns[j] = tkn;
-		tkn = strtok(NULL, " \n");
+		tkn = strtok(NULL, "	 \n");
 		j++;
+		return(tkns);
 	}
-	return (tkns);
+	free(tkns);
+	exit(EXIT_SUCCESS);
+
 }
 char **_path(void)
 {
-	char *path = getenv("PATH");
+	char *path = get_env("PATH");
 	char *ptkn;
 	char **ptkns;
-	int i = 1024;
+	int pnum = 0;
 	int j = 0;
 
-	ptkns = malloc(sizeof(char *) * i);
+	pnum = num_count(path);
+	ptkns = calloc(pnum + 1, sizeof(char *));
 	ptkn = strtok(path, ":");
+	if (!ptkns)
+		return(0);
 
 	while (ptkn)
 	{
@@ -74,10 +90,10 @@ char **get_command(char **tkns)
 	while (path[i])
 	{
 		ccopy = tkns[0];
-		function = malloc(strlen(path[i]) + strlen(ccopy) + 1);
+		function = _calloc(str_len(path[i]) + str_len(ccopy) + 2, sizeof(char));
 		if (!function)
 		{
-			perror("nashe");
+			perror("Error");
 			exit(EXIT_FAILURE);
 		}
 		strcpy(function, path[i]);
@@ -90,14 +106,13 @@ char **get_command(char **tkns)
 		}
 		i++;
 	}
+	free(function);
 	return (tkns);
 }
 void execute(char **tokenbuff)
 {
-	char *buff = NULL;
 	pid_t p, w;
 	char **function;
-	char command = 0;
 
 	int wstatus;
 
@@ -105,13 +120,14 @@ void execute(char **tokenbuff)
 
 	if (p == -1)
 	{
-		perror("nashe");
+		perror("Error");
 		exit(EXIT_FAILURE);
 	}
 	else if (p == 0)
 	{
 		function = get_command(tokenbuff);
-		command = execve(function[0], function, environ);
+		if(execve(function[0], function, environ) == 1)
+			exit(0);
 		exit(0);
 	}
 	else
@@ -122,12 +138,4 @@ void execute(char **tokenbuff)
 			exit(EXIT_FAILURE);
 
 	}
-}
-/**
- *fun_exit - function exit shell
- *return: always 0
- */
-int fun_exit(char **function)
-{
-	return (0);
 }
