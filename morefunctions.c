@@ -19,3 +19,15 @@ int num_count (char *var)
 
 	
 }
+int free_all(char **buffer)
+{
+	int i = 0;
+
+	if(!buffer)
+		return(0);
+
+	for (; i < 0; i++)
+		free(buffer[i]);
+	free (buffer);
+	return(0);
+}

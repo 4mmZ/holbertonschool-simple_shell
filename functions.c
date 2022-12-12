@@ -53,8 +53,9 @@ char **tokenize(char *str)
 		j++;
 		return(tkns);
 	}
-	free(tkns);
-	exit(EXIT_SUCCESS);
+	free(str);
+	free_all(tkns);
+	exit(0);
 
 }
 char **_path(void)
@@ -93,6 +94,7 @@ char **get_command(char **tkns)
 		function = _calloc(str_len(path[i]) + str_len(ccopy) + 2, sizeof(char));
 		if (!function)
 		{
+			free_all(path);
 			perror("Error");
 			exit(EXIT_FAILURE);
 		}
@@ -106,6 +108,7 @@ char **get_command(char **tkns)
 		}
 		i++;
 	}
+	free_all(path);
 	free(function);
 	return (tkns);
 }
@@ -126,9 +129,9 @@ void execute(char **tokenbuff)
 	else if (p == 0)
 	{
 		function = get_command(tokenbuff);
-		if(execve(function[0], function, environ) == 1)
-			exit(0);
-		exit(0);
+		execve(function[0], function, environ);
+		free(tokenbuff);
+		exit(EXIT_SUCCESS);
 	}
 	else
 	{

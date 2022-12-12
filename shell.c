@@ -11,25 +11,28 @@ int main(void)
 	while (1)
 	{
 		if (isatty(0) == 1)
-			printf("SNA$ ");
+			printf("$ ");
 		if (getline(&buffer, &i, stdin) == -1)
 		{
 			free(buffer);
-			return (0);
+			exit (0);
 		
 		}
-		tokenbuff = tokenize(buffer);
-		execute(tokenbuff);
-		free(tokenbuff);
-
+		else
+		{
+			tokenbuff = tokenize(buffer);
+			execute(tokenbuff);
+			free_all(tokenbuff);
+		}
 		if (_strcmp(buffer, "exit") == 0)
 		{
 			free(buffer);
-			return (0);
+			exit (EXIT_SUCCESS);
 		}
 	}
 	free(buffer);
 	free(tokenbuff);
+	exit(0);
 }
 /*
 void prompt (int entero)
