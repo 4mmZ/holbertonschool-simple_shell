@@ -27,8 +27,7 @@ char *get_env(char *variable)
 		x++;
 		con = 0;
 	}
-	free(path);
-	return (NULL);
+	return (0);
 }
 char **tokenize(char *str)
 {
@@ -42,7 +41,7 @@ char **tokenize(char *str)
 	tkns = _calloc(num + 1, sizeof(char *));
 	if (!tkns)
 	{
-		return(NULL);
+		return (0);
 	}
 	tkn = strtok(str, "	 \n");
 	while (tkn)
@@ -65,9 +64,6 @@ char **_path(void)
 	pnum = num_count(path);
 	ptkns = _calloc(pnum + 1, sizeof(char *));
 	ptkn = strtok(path, ":");
-	if (!ptkns)
-		return(0);
-
 	while (ptkn)
 	{
 		ptkns[j] = ptkn;
@@ -90,7 +86,7 @@ char **get_command(char **tkns)
 		function = _calloc(str_len(path[i]) + str_len(ccopy) + 2, sizeof(char));
 		if (!function)
 		{
-			free_all(path);
+			free(path);
 			perror("Error");
 			exit(EXIT_FAILURE);
 		}
@@ -103,10 +99,12 @@ char **get_command(char **tkns)
 			return (tkns);
 		}
 		i++;
+		free(function), function = NULL;
 	}
+	free(tkns); tkns = NULL;
 	free_all(path);
 	free(function);
-	return (tkns);
+	return (0);
 }
 void execute(char **tokenbuff)
 {
@@ -127,6 +125,7 @@ void execute(char **tokenbuff)
 		function = get_command(tokenbuff);
 		execve(function[0], function, environ);
 		free(tokenbuff);
+		free(function[0]), function[0] = NULL;
 		exit(EXIT_SUCCESS);
 	}
 	else

@@ -17,8 +17,8 @@ int main(void)
 		if (line == -1)
 		{
 			free(buffer);
-			exit (0);
-		
+			exit(0);
+
 		}
 		tokenbuff = tokenize(buffer);
 		if (tokenbuff == NULL)
@@ -27,19 +27,14 @@ int main(void)
 			exit(0);
 		}
 		execute(tokenbuff);
+		free(tokenbuff), tokenbuff = NULL;
 		/*free_all(tokenbuff);*/
 		if (_strcmp(buffer, "exit") == 0)
 		{
 			free(buffer);
-			exit (EXIT_SUCCESS);
+			return(0);
 		}
 	}
-	free(buffer);
-	free(tokenbuff);
-	exit(0);
+	free_all(tokenbuff);
+	exit(EXIT_SUCCESS);
 }
-/*
-void prompt (int entero)
-{
-	printf("SNA$");
-}*/
