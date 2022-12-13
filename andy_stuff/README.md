@@ -2,7 +2,7 @@
 
 ## Description ##
 
-* The way our shell works:
+The way our shell works:
 
 Receives an input that is tokenized. The beginning of the program stores memory for pointers of the type "char", arguments are passed that are reallocated in each iteration of the main function that is executed in a loop and in this way we make sure that we do not run out of memory.
 $PATH is already connected to the path that contains each node, each tokenized argument in the main function.
