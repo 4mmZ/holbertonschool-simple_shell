@@ -1,13 +1,19 @@
 # Project Simple Shell #
 
 ## Description ##
-* The program is a command-line interpreter, this means that the shell is a traductor between the user and the system. 
-* Take the user input through the keyboard and displays the outputin the screen (in form of standard input).
 
+* The way our shell works:
 
+Receives an input that is tokenized. The beginning of the program stores memory for pointers of the type "char", arguments are passed that are reallocated in each iteration of the main function that is executed in a loop and in this way we make sure that we do not run out of memory.
+$PATH is already connected to the path that contains each node, each tokenized argument in the main function.
+We clone the execution syntax with "fork" where it is evaluated in which process the program is being executed.
 ## File Description ##
 
-	
+* functions.c - Functions that are used, get_env gets environment variable value, _path gets path, get_command gets assigned command, execute executes a thread.
+* main.h - file that sabe the prototypes.
+* shell.c - function that initializes the command interpreter (shell).
+* morefunction.c & prohibitedfunction.c - prohibited functions that are not accessible.
+* man_1_simple_shell - manual of out shell.
 
 ## Requirements ##
 
