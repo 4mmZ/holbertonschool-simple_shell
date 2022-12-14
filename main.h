@@ -9,10 +9,10 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 
-extern char ** environ;
+extern char **environ;
 
 int free_all(char **buffer);
-int num_count (char *var);
+int num_count(char *var);
 void *_calloc(unsigned int nmemb, unsigned int size);
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
@@ -22,5 +22,5 @@ char **tokenize(char *str);
 char **_path(void);
 char **get_command(char **tkns);
 void execute(char **tokenbuff);
-char * get_env(char * variable);
+char *get_env(char *variable);
 #endif
