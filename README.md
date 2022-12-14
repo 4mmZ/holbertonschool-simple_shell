@@ -29,7 +29,7 @@ We clone the execution syntax with "fork" where it is evaluated in which process
 	`gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh`
 
 ## Flowchart ##
-	https://cloud.smartdraw.com/share.aspx/?pubDocShare=1E2D7B0DD9E993B8ECFA37DD4ACD23D478A
+	<img src=![flowchart dos](https://user-images.githubusercontent.com/113656077/207481489-d1fc33f2-0699-4ca9-ad36-1eb97db62e9c.png)
 
 ## Authors
 
