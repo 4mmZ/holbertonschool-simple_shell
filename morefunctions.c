@@ -1,5 +1,11 @@
 #include "main.h"
 
+/**
+ * function that receives a string and recorres with a counter
+ * and returns the counter.
+ * @var: the variable that  want to recorre.
+ * return: the counter;
+ */
 int num_count(char *var)
 {
 	int count = 0;
@@ -17,6 +23,11 @@ int num_count(char *var)
 
 
 }
+/**
+ * free_all - function that frees an entire string.
+ * @buffer: the string that i want to frees.
+ * Return: 0
+ */
 int free_all(char **buffer)
 {
 	int i = 0;

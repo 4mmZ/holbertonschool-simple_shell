@@ -71,18 +71,24 @@ void *_calloc(unsigned int nmemb, unsigned int size)
 
 		if (a == NULL)
 		{
-			free (a);
+			free(a);
 			return (NULL);
 		}
 		for (i = 0; i < (nmemb * size); i++)
 		{
 			a[i] = 0;
 		}
-		return(a);
+		return (a);
 	}
 	free(a);
 	exit(EXIT_SUCCESS);
 }
+/**
+ *_strcpy - funcion
+ * @src: pointer
+ * @dest: pointer
+ * Return: the copy
+ */
 char *_strcpy(char *dest, char *src)
 {
 	int i;

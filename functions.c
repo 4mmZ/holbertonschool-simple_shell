@@ -1,5 +1,12 @@
 #include "main.h"
 
+/**
+ * get_env - fuction that recorres the enviroments variables and return
+ * an specific value
+ * @variable: the string passed when the function its called
+ * Return: 0
+ */
+
 char *get_env(char *variable)
 {
 	char **env = environ;
@@ -29,6 +36,12 @@ char *get_env(char *variable)
 	}
 	return (0);
 }
+/**
+ * tokenize - function that receives a string and tokenize it
+ * and return an string whitout spaces and tabs
+ * @str: the string passed bi the stdin
+ * Return: [tkns] the tokenized string
+ */
 char **tokenize(char *str)
 {
 	char *tkn;
@@ -37,13 +50,10 @@ char **tokenize(char *str)
 	int j = 0;
 
 	num = num_count(str);
-
 	tkns = _calloc(num + 1, sizeof(char *));
 	if (!tkns)
-	{
 		return (0);
-	}
-	tkn = strtok(str, "	 \n");
+	tkn = strtok(str, "      \n");
 	while (tkn)
 	{
 		tkns[j] = tkn;
@@ -51,8 +61,12 @@ char **tokenize(char *str)
 		j++;
 	}
 	return (tkns);
-
 }
+/**
+ * _path - function that calls the another function get_env to get the  value
+ * of an specific enviroment variable
+ * Return: [ptkn] a string with the path in this "case" tokenized withot ":"
+ */
 char **_path(void)
 {
 	char *path = get_env("PATH");
@@ -72,6 +86,12 @@ char **_path(void)
 	}
 	return (ptkns);
 }
+/**
+ *get_command - function that receives the strings of _path and tokenize.
+ *And concatenes return the full path of a command like /bin/ls.
+ *@tkns: [tkns] the tokenized string.
+ * Return: the full path of a program.
+ */
 char **get_command(char **tkns)
 {
 	 char *ccopy;
@@ -79,6 +99,9 @@ char **get_command(char **tkns)
 	 char *function = NULL;
 	 int i = 0;
 	 struct stat buf;
+
+	if (!stat(tkns[0], &buf))
+		return (tkns);
 
 	while (path[i])
 	{
@@ -101,11 +124,16 @@ char **get_command(char **tkns)
 		i++;
 		free(function), function = NULL;
 	}
-	free(tkns); tkns = NULL;
+	free(tkns);
 	free_all(path);
 	free(function);
 	return (0);
 }
+/**
+ *execute - function that receives a buffer and uses the system call execve to
+ * execute a function gived by the path
+ *@tokenbuff: the stdin imput
+ */
 void execute(char **tokenbuff)
 {
 	pid_t p, w;
@@ -123,9 +151,11 @@ void execute(char **tokenbuff)
 	else if (p == 0)
 	{
 		function = get_command(tokenbuff);
-		execve(function[0], function, environ);
-		free(tokenbuff);
-		free(function[0]), function[0] = NULL;
+		if (execve(function[0], function, environ) == -1)
+		{
+			free(tokenbuff);
+			exit(EXIT_FAILURE);
+		}
 		exit(EXIT_SUCCESS);
 	}
 	else

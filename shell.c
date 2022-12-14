@@ -1,6 +1,9 @@
 #include "main.h"
 
-/*void prompt (int entero);*/
+/**
+ * main - basic shell proyect: a Unix command interpreter;
+ * Return: 0
+ */
 
 int main(void)
 {
@@ -8,7 +11,7 @@ int main(void)
 	size_t i = 0;
 	char **tokenbuff;
 	int line = 0;
-	/*signal(SIGINT, prompt);*/
+
 	while (1)
 	{
 		if (isatty(0) == 1)
@@ -18,7 +21,6 @@ int main(void)
 		{
 			free(buffer);
 			exit(0);
-
 		}
 		tokenbuff = tokenize(buffer);
 		if (tokenbuff == NULL)
@@ -32,9 +34,10 @@ int main(void)
 		if (_strcmp(buffer, "exit") == 0)
 		{
 			free(buffer);
-			return(0);
+			return (0);
 		}
 	}
 	free_all(tokenbuff);
 	exit(EXIT_SUCCESS);
+	return (0);
 }
